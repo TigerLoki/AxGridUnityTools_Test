@@ -13,26 +13,19 @@ namespace TASK3.Scripts
         [SerializeField] private RectTransform top;
         [SerializeField] private RectTransform middle;
         [SerializeField] private RectTransform bottom;
+        
+        public int ReelIndex => reelIndex;
 
         [Header("Symbol Sprites")]
         [SerializeField] private Sprite[] symbols;
-
-        [Header("Animations")]
-        [SerializeField] private float maxSpeed = 2000f;
-        [SerializeField] private float accelTime = 3f;
-        [SerializeField] private float decelTime = 3f;
-        [SerializeField] private float bounceTime = 1f;
         
-        [Header("VFX")]
-        [SerializeField] private ParticleSystem[] sparksSystems;
-        [SerializeField] private float sparksMaxRate = 50f;
-
-        [Header("Frame")]
-        [SerializeField] private Image frameImage;
-        [SerializeField] private float frameDelay = 1.0f;
-
         [Header("Debug")]
         [SerializeField] private bool logResult = true;
+        
+        private float MaxSpeed => Settings.Model.GetFloat("MaxSpeed");
+        private float AccelerationTime => Settings.Model.GetFloat("AccelerationTime");
+        private float DecelerationTime => Settings.Model.GetFloat("DecelerationTime");
+        private float BounceTime => Settings.Model.GetFloat("BounceTime");
 
         private float itemHeight;
         private float currentSpeed;
@@ -61,9 +54,6 @@ namespace TASK3.Scripts
             topImg = top.GetComponent<Image>();
             midImg = middle.GetComponent<Image>();
             botImg = bottom.GetComponent<Image>();
-
-            foreach (var ps in sparksSystems)
-                ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             
             itemHeight = middle.rect.height;
 
@@ -80,13 +70,6 @@ namespace TASK3.Scripts
             ApplySymbol(topImg, topId);
             ApplySymbol(midImg, midId);
             ApplySymbol(botImg, botId);
-
-            if (frameImage != null)
-            {
-                Color c = frameImage.color;
-                c.a = 0f;
-                frameImage.color = c;
-            }
         }
 
         [OnUpdate]
@@ -117,13 +100,6 @@ namespace TASK3.Scripts
             forwardSpin = false;
             allowShift = false;
 
-            if (frameImage != null)
-            {
-                Color c = frameImage.color;
-                c.a = 0f;
-                frameImage.color = c;
-            }
-
             targetId = Settings.Model.GetInt($"Win{reelIndex}");
 
             if (logResult)
@@ -151,36 +127,10 @@ namespace TASK3.Scripts
                     allowShift = true;
                 })
                 .EasingQuadEaseIn(
-                    accelTime,
+                    AccelerationTime,
                     0f,
-                    maxSpeed,
+                    MaxSpeed,
                     v => currentSpeed = v
-                );
-        }
-        
-        [Bind("StartSparks")]
-        private void StartSparks(int index)
-        {
-            if (index != reelIndex) return;
-            if (sparksSystems == null) return;
-
-            var p = CreateNewPath();
-
-            p.Wait(accelTime * 0.5f)
-                .Action(() =>
-                {
-                    if (!spinning || stopping) return;
-                    
-                    SetSparksRate(0f);
-
-                    foreach (var ps in sparksSystems)
-                        ps.Play(true);
-                })
-                .EasingQuadEaseOut(
-                    accelTime * 0.5f,
-                    0f,
-                    sparksMaxRate,
-                    SetSparksRate
                 );
         }
 
@@ -195,7 +145,7 @@ namespace TASK3.Scripts
             forwardSpin = true;
             allowShift = true;
 
-            float mainPart = Mathf.Max(decelTime * 0.5f, decelTime - bounceTime);
+            float mainPart = Mathf.Max(DecelerationTime * 0.5f, DecelerationTime - BounceTime);
 
             float remainder = Mathf.Repeat(GetY(middle), itemHeight);
             float distance = remainder + 3f * itemHeight;
@@ -253,7 +203,7 @@ namespace TASK3.Scripts
                     SetY(bottom, -itemHeight);
                 })
                 .EasingQuadEaseOut(
-                    bounceTime * 0.4f,
+                    BounceTime * 0.4f,
                     0f,
                     -overshoot1,
                     v =>
@@ -263,7 +213,7 @@ namespace TASK3.Scripts
                         OffsetAll(d);
                     })
                 .EasingQuadEaseIn(
-                    bounceTime * 0.3f,
+                    BounceTime * 0.3f,
                     -overshoot1,
                     overshoot2,
                     v =>
@@ -273,7 +223,7 @@ namespace TASK3.Scripts
                         OffsetAll(d);
                     })
                 .EasingQuadEaseOut(
-                    bounceTime * 0.2f,
+                    BounceTime * 0.2f,
                     overshoot2,
                     -overshoot3,
                     v =>
@@ -283,7 +233,7 @@ namespace TASK3.Scripts
                         OffsetAll(d);
                     })
                 .EasingQuadEaseIn(
-                    bounceTime * 0.1f,
+                    BounceTime * 0.1f,
                     -overshoot3,
                     0f,
                     v =>
@@ -301,71 +251,6 @@ namespace TASK3.Scripts
                     
                     Settings.Invoke("ReelStopped");
                 });
-        }
-        
-        [Bind("StopSparks")]
-        private void StopSparks(int index)
-        {
-            if (index != reelIndex) return;
-            if (sparksSystems == null) return;
-
-            float currentRate = 0f;
-            if (sparksSystems.Length > 0)
-                currentRate = sparksSystems[0].emission.rateOverTime.constant;
-
-            var p = CreateNewPath();
-
-            p.EasingQuadEaseOut(
-                    decelTime * 0.5f,
-                    currentRate,
-                    0f,
-                    SetSparksRate
-                )
-                .Action(() =>
-                {
-                    SetSparksRate(0f);
-
-                    foreach (var ps in sparksSystems)
-                        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-                });
-        }
-        
-        [Bind("SetReelFrame")]
-        private void SetReelFrame(int index, bool enabled)
-        {
-            if (index != reelIndex) return;
-            if (frameImage == null) return;
-
-            if (!enabled)
-            {
-                Color c = frameImage.color;
-                c.a = 0f;
-                frameImage.color = c;
-                return;
-            }
-
-            Path = new CPath();
-
-            Path.EasingQuadEaseOut(
-                frameDelay,
-                frameImage.color.a,
-                1f,
-                v =>
-                {
-                    Color col = frameImage.color;
-                    col.a = v;
-                    frameImage.color = col;
-                });
-        }
-        
-        [Bind("ClearAllFrames")]
-        private void ClearAllFrames()
-        {
-            if (frameImage == null) return;
-
-            Color c = frameImage.color;
-            c.a = 0f;
-            frameImage.color = c;
         }
 
         private void ShiftOnce()
@@ -413,17 +298,6 @@ namespace TASK3.Scripts
             bottom.anchoredPosition += Vector2.up * delta;
         }
         
-        private void SetSparksRate(float value)
-        {
-            if (sparksSystems == null) return;
-
-            foreach (var ps in sparksSystems)
-            {
-                var em = ps.emission;
-                em.rateOverTime = value;
-            }
-        }
-
         private static void Move(RectTransform rt, float delta)
         {
             rt.anchoredPosition -= Vector2.up * delta;

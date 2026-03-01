@@ -5147,8 +5147,6 @@ MonoBehaviour:
   - {fileID: 4055238752583397057}
   - {fileID: 1676375495132232041}
   sparksMaxRate: 50
-  frameImage: {fileID: 1391198392773034070}
-  frameDelay: 0.2
   logResult: 1
 --- !u!1 &4650088490449635955
 GameObject:
@@ -5161,6 +5159,7 @@ GameObject:
   - component: {fileID: 2339478176863509801}
   - component: {fileID: 4055238752583397057}
   - component: {fileID: 8373681902507197417}
+  - component: {fileID: 6802906190513241596}
   m_Layer: 5
   m_Name: SparksLeft
   m_TagString: Untagged
@@ -9991,6 +9990,26 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!114 &6802906190513241596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4650088490449635955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f7178d03692dc8419d4f42e0c07d1fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SlotParticleController
+  globalModel: 0
+  reelIndex: 0
+  sparksSystems:
+  - {fileID: 4055238752583397057}
+  - {fileID: 1676375495132232041}
+  sparksMaxRate: 50
+  accelTime: 3
+  decelTime: 3
 --- !u!1 &7213641102506914154
 GameObject:
   m_ObjectHideFlags: 0
@@ -10002,6 +10021,7 @@ GameObject:
   - component: {fileID: 8099942221446023647}
   - component: {fileID: 9142421782373095739}
   - component: {fileID: 1391198392773034070}
+  - component: {fileID: 3198453731247464468}
   m_Layer: 5
   m_Name: WinFrame
   m_TagString: Untagged
@@ -10066,6 +10086,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.6
+--- !u!114 &3198453731247464468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7213641102506914154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94d06e24efc451640b52b58b3595f04c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TASK3.Scripts.SlotFrameView
+  globalModel: 0
+  reelIndex: 0
+  frameImage: {fileID: 1391198392773034070}
+  fadeTime: 0.3
 --- !u!1 &9091175897848415690
 GameObject:
   m_ObjectHideFlags: 0

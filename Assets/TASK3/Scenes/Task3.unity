@@ -454,6 +454,7 @@ GameObject:
   - component: {fileID: 415305394}
   - component: {fileID: 415305395}
   - component: {fileID: 415305393}
+  - component: {fileID: 415305396}
   m_Layer: 5
   m_Name: SlotGame
   m_TagString: Untagged
@@ -532,6 +533,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TASK3.Scripts.SlotSequenceController
   globalModel: 0
+--- !u!114 &415305396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415305390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99e4ca9c1bfb6f645b161cfff0317cee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TASK3.Scripts.SlotConfigView
+  maxSpeed: 3000
+  accelerationTime: 3
+  decelerationTime: 3
+  bounceTime: 1
+  sparksMaxRate: 50
+  frameFadeTime: 0.3
 --- !u!1 &667636377
 GameObject:
   m_ObjectHideFlags: 0
@@ -566,7 +585,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -53.750122, y: 120}
+  m_AnchoredPosition: {x: -53.75, y: 120}
   m_SizeDelta: {x: 352.5, y: 708}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &667636379
@@ -831,10 +850,20 @@ PrefabInstance:
       propertyPath: reelIndex
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3198453731247464468, guid: b62d64d1743c4894a9655a2ac8b64007,
+        type: 3}
+      propertyPath: reelIndex
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3733431917255020707, guid: b62d64d1743c4894a9655a2ac8b64007,
         type: 3}
       propertyPath: m_Name
       value: Reel_002
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802906190513241596, guid: b62d64d1743c4894a9655a2ac8b64007,
+        type: 3}
+      propertyPath: reelIndex
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1171,10 +1200,20 @@ PrefabInstance:
       propertyPath: reelIndex
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3198453731247464468, guid: b62d64d1743c4894a9655a2ac8b64007,
+        type: 3}
+      propertyPath: reelIndex
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3733431917255020707, guid: b62d64d1743c4894a9655a2ac8b64007,
         type: 3}
       propertyPath: m_Name
       value: Reel_003
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802906190513241596, guid: b62d64d1743c4894a9655a2ac8b64007,
+        type: 3}
+      propertyPath: reelIndex
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1434,10 +1473,20 @@ PrefabInstance:
       propertyPath: reelIndex
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3198453731247464468, guid: b62d64d1743c4894a9655a2ac8b64007,
+        type: 3}
+      propertyPath: reelIndex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3733431917255020707, guid: b62d64d1743c4894a9655a2ac8b64007,
         type: 3}
       propertyPath: m_Name
       value: Reel_001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6802906190513241596, guid: b62d64d1743c4894a9655a2ac8b64007,
+        type: 3}
+      propertyPath: reelIndex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
